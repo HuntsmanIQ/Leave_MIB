@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112530840436",
+    "project_id": "leave-mib",
+    "storage_bucket": "leave-mib.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112530840436:android:82cab07babf08579b9aa21",
+        "android_client_info": {
+          "package_name": "com.mib.leave_mib"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdrHfrAQBDCnckpjBcF56p7aT0S1oYEsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
