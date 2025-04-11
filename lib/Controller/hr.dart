@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:leave_mib/Controller/updateLeave.dart';
 
 void listenForApprovedLeaves() {
   FirebaseFirestore.instance
@@ -74,7 +73,7 @@ void listenForApprovedLeaves2(dynamic duration) {
       .snapshots()
       .listen((snapshot) {
     for (var doc in snapshot.docs) {
-      if (doc['duration'] > 3) {
+      if (doc['duration'] > 3 || doc['Period'] == '0') {
         moveLeaveToMaster(doc);
       } else {
         moveLeaveToCEO(doc);

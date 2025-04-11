@@ -20,59 +20,73 @@ class LoginPage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: ListView(
-            children: [
-              const SizedBox(height: 410),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  height: 380,
-                  width: 398,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white.withOpacity(0.6),
-                  ),
-                  child: GetBuilder<Auth>(
-                    init: Auth(),
-                    builder: (auth) => Column(
-                      children: [
-                        auth.isLoading
-                            ? CircularProgressIndicator() // Show when loading
-                            : SizedBox(),
-                        SizedBox(height: 50),
-                        Username(
-                          controller: usernameController,
-                        ),
-                        SizedBox(height: 15),
-                        Password(
-                          controller: passwordController,
-                        ),
-                        SizedBox(height: 10),
-                        LoginButton(onTap: () {
-                          auth.startLoading();
-                          auth.signIn(
-                              usernameController.text, passwordController.text);
-                        }),
-                        SizedBox(height: 10),
-                        TextButton(
-                          onPressed: () => auth.showResetPage(context),
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromARGB(255, 8, 109, 233)),
+      child: GetBuilder<Logincontroller>(
+        init: Logincontroller(),
+        builder: (controller) => Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: ListView(
+              children: [
+                const SizedBox(height: 410),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Container(
+                    height: 380,
+                    width: 398,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white.withOpacity(0.6),
+                    ),
+                    child: GetBuilder<Auth>(
+                      init: Auth(),
+                      builder: (auth) => Stack(
+                        children: [
+                          AbsorbPointer(
+                            absorbing: auth.isLoading,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                Username(controller: usernameController),
+                                SizedBox(height: 15),
+                                Password(controller: passwordController),
+                                SizedBox(height: 10),
+                                LoginButton(onTap: () {
+                                  auth.startLoading();
+
+                                  auth.signIn(
+                                    usernameController.text,
+                                    passwordController.text,
+                                  );
+                                }),
+                                SizedBox(height: 10),
+                                TextButton(
+                                  onPressed: () => auth.showResetPage(context),
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color.fromARGB(
+                                          255, 8, 109, 233),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 1),
-                      ],
+                          if (auth.isLoading) ...[
+                            ModalBarrier(
+                              dismissible: false,
+                              color: Colors.black.withOpacity(0.3),
+                            ),
+                            Center(child: CircularProgress()),
+                          ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -123,7 +137,7 @@ class Username extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
           obscureText: false,
           decoration: const InputDecoration(
-            label: Text('User ID'),
+            label: Text('Email'),
             border: InputBorder.none,
             prefixIcon: Icon(Icons.person),
           ),
@@ -164,6 +178,45 @@ class Password extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CircularProgress extends StatelessWidget {
+  const CircularProgress({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      margin: EdgeInsets.symmetric(horizontal: 50),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(width: 16),
+          Text(
+            'Please wait...',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
     );
   }

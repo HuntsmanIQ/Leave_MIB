@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "leave-mib"
+  },
+  "targets": {
+    "leave-mib": {
+      "hosting": {
+        "leave-main": [
+          "leave-mib"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

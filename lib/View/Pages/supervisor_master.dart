@@ -70,6 +70,9 @@ class SupervisorMaster extends StatelessWidget {
                 itemCount: leaveRequests.length,
                 itemBuilder: (context, index) {
                   var doc = leaveRequests[index];
+                  if (doc['Period'] == '0') {
+                    moveLeaveToMaster(doc);
+                  }
 
                   return Center(
                     child: Container(
@@ -121,8 +124,14 @@ class SupervisorMaster extends StatelessWidget {
                                 txt: 'Approve',
                                 press: () {
                                   updateLeaveApprovalSupervisor(
-                                      doc['employeeID'],
-                                      CEOApproval: true);
+                                    doc['employeeID'],
+                                    doc['duration'],
+                                    doc['department'],
+                                    doc['leaveType'],
+                                    doc['date'],
+                                    doc['Period'],
+                                    CEOApproval: true,
+                                  );
 
                                   updateLeaveBalance(
                                       doc['employeeID'], -doc['duration']);

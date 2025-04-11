@@ -17,7 +17,10 @@ class CEOPage extends StatelessWidget {
       return const Stream.empty();
     }
 
-    return _firestore.collection('ceo').snapshots();
+    return _firestore
+        .collection('ceo')
+        .where('employeeID', isNotEqualTo: '')
+        .snapshots();
   }
 
   @override
@@ -31,19 +34,13 @@ class CEOPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
             var leaveRequests = snapshot.data!.docs;
-            var validDocs = leaveRequests.where((doc) {
-              var data = doc.data() as Map<String, dynamic>?;
-              return data != null &&
-                  data.containsKey('employeeID') &&
-                  data['employeeID'] != null;
-            }).toList();
 
-            if (leaveRequests.length < 2) {
+            if (leaveRequests.length < 1) {
               return Center(child: Text("لا توجد طلبات إجازة"));
             }
 
             return ListView.builder(
-                itemCount: validDocs.length,
+                itemCount: leaveRequests.length,
                 itemBuilder: (context, index) {
                   var doc = leaveRequests[index];
 
@@ -96,7 +93,13 @@ class CEOPage extends StatelessWidget {
                                 textColor: Colors.white,
                                 txt: 'Approve',
                                 press: () {
-                                  updateLeaveApprovalCEO(doc['employeeID'],
+                                  updateLeaveApprovalCEO(
+                                      doc['employeeID'],
+                                      doc['duration'],
+                                      doc['department'],
+                                      doc['leaveType'],
+                                      doc['date'],
+                                      doc['Period'],
                                       CEOApproval: true);
 
                                   updateLeaveBalance(

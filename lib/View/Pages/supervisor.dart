@@ -1,11 +1,10 @@
+import 'package:rxdart/rxdart.dart' as rx;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:leave_mib/Controller/hr.dart';
 import 'package:leave_mib/Controller/updateLeave.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:leave_mib/Model/global.dart';
 import 'package:leave_mib/Model/notification.dart';
 import 'package:leave_mib/View/Pages/Widgets/ButtonLeaves.dart';
@@ -42,14 +41,34 @@ class SuperVisorPage extends StatelessWidget {
         List<String> employeeIDs =
             employeesSnapshot.docs.map((doc) => doc.id).toList();
 
+        Global.employeeIDs = employeeIDs;
+
         if (employeeIDs.isEmpty) {
           return const Stream.empty();
         }
 
-        return _firestore
-            .collection('leaves')
-            .where('employeeID', whereIn: employeeIDs)
-            .snapshots();
+        List<Stream<QuerySnapshot>> streams = [];
+
+        for (var i = 0; i < employeeIDs.length; i += 10) {
+          final batch = employeeIDs.sublist(
+            i,
+            (i + 10 > employeeIDs.length) ? employeeIDs.length : i + 10,
+          );
+
+          final stream = _firestore
+              .collection('leaves')
+              .where('employeeID', whereIn: batch)
+              .snapshots();
+
+          streams.add(stream);
+        }
+
+        // نستخدم combineLatest لدمج كل الستريمات بشكل تفاعلي
+
+        return rx.CombineLatestStream.list(streams).map((snapshotsList) {
+          final allDocs = snapshotsList.expand((snap) => snap.docs).toList();
+          return QuerySnapshotFake(allDocs);
+        });
       });
     });
   }
@@ -195,4 +214,15 @@ class MyText extends StatelessWidget {
         style: const TextStyle(
             fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black));
   }
+}
+
+// this from ChatGPT to make more than 10 employees :D
+class QuerySnapshotFake implements QuerySnapshot {
+  @override
+  final List<QueryDocumentSnapshot> docs;
+
+  QuerySnapshotFake(this.docs);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

@@ -24,6 +24,10 @@ class VacationController extends GetxController {
   //period to post in Firebase to show only
   String period = '1 يـوم';
 
+  // date for private leaves only
+  String datePrivate = '';
+  String leaveTypePrivate = '';
+
   Future<void> pickDateAndTimeRange(BuildContext context) async {
     // Step 1: Pick a date
     final DateTime? date = await showDatePicker(
@@ -85,6 +89,24 @@ class VacationController extends GetxController {
       period = '$dayDuration يـوم';
       update();
     }
+  }
+
+  // for private leaves only
+  Future<void> pickDatePrivate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      String formattedDate =
+          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+
+      datePrivate = formattedDate;
+    }
+    update();
   }
 
 ////

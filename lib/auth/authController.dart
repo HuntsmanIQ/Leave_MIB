@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:leave_mib/Controller/fetchManagerEmployees.dart';
 import 'package:leave_mib/auth/resetPage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -47,6 +48,7 @@ class Auth extends GetxController {
       Global.leaveBalance = employeeData['leave'];
       bool isManager = employeeData['isManager'];
       String position = employeeData['position'];
+      Global.managerID = employeeData['ManagerID'];
 
       await FirebaseFirestore.instance
           .collection('employees')
@@ -143,12 +145,16 @@ class Auth extends GetxController {
         isManager: isManager,
         managerID: managerID,
         department: department,
+        position: position,
       ));
+      fetchManagerEmployees();
+      print(Global.employeeIDs);
     } else {
       Get.off(EmployeHomePage(
         name: name,
         managerID: managerID,
         department: department,
+        position: position,
       ));
     }
   }
@@ -168,7 +174,7 @@ class Auth extends GetxController {
   void startLoading() async {
     isLoading = true;
     update();
-    await Future.delayed(Duration(seconds: 15));
+    await Future.delayed(Duration(minutes: 1));
     isLoading = false;
     update();
   }

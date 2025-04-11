@@ -44,6 +44,8 @@ dependencies:
   googleapis_auth: ^1.6.0
   local_auth: ^2.3.0
   flutter_secure_storage: ^9.2.4
+  async: ^2.11.0
+  rxdart: ^0.28.0
   
 
 dev_dependencies:

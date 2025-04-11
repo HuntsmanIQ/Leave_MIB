@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:leave_mib/auth/authController.dart';
 import 'dart:async';
 import 'package:leave_mib/auth/login.dart';
@@ -11,14 +10,8 @@ import 'package:leave_mib/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-    // options: FirebaseOptions(
-    //     apiKey: "AIzaSyCdrHfrAQBDCnckpjBcF56p7aT0S1oYEsg",
-    //     appId: "1:112530840436:android:82cab07babf08579b9aa21",
-    //     messagingSenderId: "112530840436",
-    //     projectId: "leave-mib")
   );
   await FirebaseMessaging.instance.requestPermission();
   Auth authController = Get.put(Auth());
@@ -58,8 +51,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset('assets/mib.jpg'), // Add your image here
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/mib.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }

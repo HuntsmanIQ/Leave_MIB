@@ -18,7 +18,10 @@ class MasterCeoPage extends StatelessWidget {
       return const Stream.empty();
     }
 
-    return _firestore.collection('Master_CEO').snapshots();
+    return _firestore
+        .collection('Master_CEO')
+        .where('employeeID', isNotEqualTo: '')
+        .snapshots();
   }
 
   @override
@@ -39,7 +42,7 @@ class MasterCeoPage extends StatelessWidget {
                   data['employeeID'] != null;
             }).toList();
 
-            if (leaveRequests.length < 2) {
+            if (leaveRequests.length < 1) {
               return Center(child: Text("لا توجد طلبات إجازة"));
             }
 
@@ -97,8 +100,16 @@ class MasterCeoPage extends StatelessWidget {
                                 textColor: Colors.white,
                                 txt: 'Approve',
                                 press: () {
-                                  updateLeaveApprovalMaster(doc['employeeID'],
+                                  updateLeaveApprovalMaster(
+                                      doc['employeeID'],
+                                      doc['duration'],
+                                      doc['department'],
+                                      doc['leaveType'],
+                                      doc['date'],
+                                      doc['Period'],
                                       CEOApproval: true);
+                                  // updateLeaveApprovalMaster(doc['employeeID'],
+                                  //     CEOApproval: true);
 
                                   updateLeaveBalance(
                                       doc['employeeID'], -doc['duration']);

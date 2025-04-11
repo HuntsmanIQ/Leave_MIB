@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-Future<void> updateLeaveApprovalSupervisor(dynamic leaveID,
+Future<void> updateLeaveApprovalSupervisor(dynamic leaveID, dynamic duration,
+    String department, String leaveType, String date, String period,
     {bool? CEOApproval}) async {
   Map<String, dynamic> updateData2 = {};
 
@@ -19,9 +20,24 @@ Future<void> updateLeaveApprovalSupervisor(dynamic leaveID,
       .doc(leaveID)
       .update(updateData2);
   print("✅ تم تحديث حالة الإجازة بنجاح!");
+  //
+  await FirebaseFirestore.instance
+      .collection("employees")
+      .doc(leaveID)
+      .collection("history")
+      .add({
+    "name": leaveID,
+    "department": department,
+    "leaveType": leaveType,
+    "date": date,
+    "duration": duration,
+    "Period": period,
+    "timestamp": FieldValue.serverTimestamp(),
+  });
 }
 
-Future<void> updateLeaveApprovalCEO(dynamic leaveID,
+Future<void> updateLeaveApprovalCEO(dynamic leaveID, dynamic duration,
+    String department, String leaveType, String date, String period,
     {bool? CEOApproval}) async {
   Map<String, dynamic> updateData2 = {};
 
@@ -39,9 +55,24 @@ Future<void> updateLeaveApprovalCEO(dynamic leaveID,
       .doc(leaveID)
       .update(updateData2);
   print("✅ تم تحديث حالة الإجازة بنجاح!");
+
+  await FirebaseFirestore.instance
+      .collection("employees")
+      .doc(leaveID)
+      .collection("history")
+      .add({
+    "name": leaveID,
+    "department": department,
+    "leaveType": leaveType,
+    "date": date,
+    "duration": duration,
+    "Period": period,
+    "timestamp": FieldValue.serverTimestamp(),
+  });
 }
 
-Future<void> updateLeaveApprovalMaster(dynamic leaveID,
+Future<void> updateLeaveApprovalMaster(dynamic leaveID, dynamic duration,
+    String department, String leaveType, String date, String period,
     {bool? CEOApproval}) async {
   Map<String, dynamic> updateData3 = {};
 
@@ -59,6 +90,20 @@ Future<void> updateLeaveApprovalMaster(dynamic leaveID,
       .doc(leaveID)
       .update(updateData3);
   print("✅ تم تحديث حالة الإجازة بنجاح!");
+
+  await FirebaseFirestore.instance
+      .collection("employees")
+      .doc(leaveID)
+      .collection("history")
+      .add({
+    "name": leaveID,
+    "department": department,
+    "leaveType": leaveType,
+    "date": date,
+    "duration": duration,
+    "Period": period,
+    "timestamp": FieldValue.serverTimestamp(),
+  });
 }
 
 Future<void> updateLeaveApproval(dynamic leaveID,
@@ -99,10 +144,6 @@ Future<void> updateLeaveBalance(dynamic leaveID, dynamic decrement) async {
   } finally {
     isUpdating = false; // إيقاف القفل بعد الانتهاء
   }
-}
-
-void testprint(String txt) {
-  print(txt);
 }
 
 Future<void> deleteLeavebyManager(dynamic leaveDoc) async {

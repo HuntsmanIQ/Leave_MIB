@@ -1,1 +1,27 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"leave-mib","configurations":{"android":"1:112530840436:android:81c637548042b72bb9aa21"}}},"android":{"default":{"projectId":"leave-mib","appId":"1:112530840436:android:81c637548042b72bb9aa21","fileOutput":"android/app/google-services.json"}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "leave-mib",
+          "configurations": {
+            "web": "1:112530840436:web:502fd0634a4d9b12b9aa21"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "leave-mib",
+          "appId": "1:112530840436:android:81c637548042b72bb9aa21",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "hosting": {
+    "site": "leave-main",
+    "public": "build/web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  }
+}

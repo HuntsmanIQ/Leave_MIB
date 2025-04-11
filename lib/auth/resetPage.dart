@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leave_mib/auth/authController.dart';
-import 'package:leave_mib/auth/login.dart';
 
 class Resetpage extends StatelessWidget {
   Resetpage({super.key});
@@ -24,6 +23,7 @@ class Resetpage extends StatelessWidget {
           ),
           SizedBox(height: 15),
           TextField(
+            autofocus: true,
             controller: email,
             decoration: InputDecoration(
               hintText: "Email",
@@ -40,8 +40,16 @@ class Resetpage extends StatelessWidget {
             child: GetBuilder<Auth>(
               builder: (auth) => ElevatedButton(
                 onPressed: () {
-                  auth.resetPassword(email.text);
-                  Get.back();
+                  if (email.text.isEmpty) {
+                    Get.back();
+                    Get.snackbar('Error', 'الرجـاء تعـبـئة الحـقل !',
+                        backgroundColor: Colors.red);
+                  } else {
+                    auth.resetPassword(email.text);
+                    Get.back();
+                    Get.snackbar('Notification', 'تـم ارسـال الطـلب بـنـجـاح',
+                        backgroundColor: Colors.green);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 31, 30, 30),
